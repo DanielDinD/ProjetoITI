@@ -6,6 +6,7 @@ from descompressor import descomprimir_arquivo
 
 
 def main():
+    opcao = 2
     print("="*50)
     print(" Compressor e Descompressor PPM-C (Projeto ITI) ")
     print("="*50)
@@ -27,6 +28,20 @@ def main():
             continue
             
         acao = "comprimir" if opcao == '1' else "descomprimir"
+
+        # Menu de opções
+        print("\nEscolha o modo desejado:")
+        print("1 - Sem reset e sem poda")
+        print("2 - Com reset")
+        print("3 - Com poda")
+        opcao = input("Digite a opção desejada: ").strip()
+
+        if opcao == 1:
+            modo = 1
+        elif opcao == 2:
+            modo == 2
+        else:
+            modo == 3
         
         # Leitura e validação da entrada
         entrada = input("\nCaminho do arquivo de entrada (ex: dados/arquivo.txt): ").strip()
@@ -52,10 +67,10 @@ def main():
 
         # Redireciona para o orquestrador correto
         if acao == "comprimir":
-            comprimir_arquivo(entrada, saida, kmax)
+            comprimir_arquivo(entrada, saida, kmax, modo)
             pass 
         elif acao == "descomprimir":
-            descomprimir_arquivo(entrada, saida, kmax) # Descomente sua função
+            descomprimir_arquivo(entrada, saida, kmax, modo)
             pass
 
         tempo_fim = time.time()

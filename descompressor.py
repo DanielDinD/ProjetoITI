@@ -1,12 +1,12 @@
 import os
 from constantes import (
-    SIMBOLO_ESC, SIMBOLO_RESET, SIMBOLO_EOF
+    SIMBOLO_ESC, SIMBOLO_RESET, SIMBOLO_EOF, INTERVALO_PODA
 )
 from io_bits import LeitorDeBits
 from codificador_aritmetico import Decoder
 from modelo_ppm import ModeloPPMC
 
-def descomprimir_arquivo(caminho_entrada, caminho_saida, k_max):
+def descomprimir_arquivo(caminho_entrada, caminho_saida, k_max, opcao):
     print(f"Iniciando descompressão: {caminho_entrada} (Kmax: {k_max})")
 
     with open(caminho_entrada, 'rb') as f_in, open(caminho_saida, 'wb') as f_out:
@@ -19,6 +19,8 @@ def descomprimir_arquivo(caminho_entrada, caminho_saida, k_max):
         leitor = LeitorDeBits(f_in)
         decoder = Decoder(leitor)
         modelo = ModeloPPMC(k_max)
+
+        simbolos_processados = 0
 
         #Reconstrói a pizza de probabilidades, atira o dardo
         #para descobrir o símbolo e lida com os loops de <ESC> internamente
@@ -108,5 +110,10 @@ def descomprimir_arquivo(caminho_entrada, caminho_saida, k_max):
                 
                 #atualiza o contexto e as frequências para aprender
                 modelo.atualizar_contexto_e_frequencia(simbolo)
+
+                simbolos_processados += 1
+                if (opcao == 3) and (simbolos_processados % INTERVALO_PODA == 0):
+                    # print(f"  [~] Realizando poda de tabelas no byte {simbolos_processados}...")
+                    modelo.podar_tabelas()
 
     print(f"Descompressão Concluída! Salvo em: {caminho_saida}")

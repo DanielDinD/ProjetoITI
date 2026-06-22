@@ -41,3 +41,6 @@ TRES_QUARTOS = UM_QUARTO * 3                       # 75% da régua
 # Se a soma das frequências de um contexto ultrapassar esse limite,
 # todas as frequências serão divididas por 2 (rescaling).
 LIMITE_FREQUENCIA = 1 << 24
+
+
+INTERVALO_PODA = 8192

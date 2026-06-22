@@ -1,14 +1,15 @@
 import os
 from constantes import (
     SIMBOLO_RESET, SIMBOLO_EOF,
-    TAMANHO_JANELA, GATILHO_PIORA_TAXA
+    TAMANHO_JANELA, GATILHO_PIORA_TAXA,
+    INTERVALO_PODA
 )
 from io_bits import EscritorDeBits
 from codificador_aritmetico import Encoder
 from modelo_ppm import ModeloPPMC
 from codificador_ppm import codificar_simbolo_ppm
 
-def comprimir_arquivo(caminho_entrada, caminho_saida, k_max):
+def comprimir_arquivo(caminho_entrada, caminho_saida, k_max, opcao):
     tamanho_original = os.path.getsize(caminho_entrada)
     print(f"Iniciando compressão: {caminho_entrada} (Tamanho: {tamanho_original} bytes | Kmax: {k_max})")
 
@@ -43,7 +44,14 @@ def comprimir_arquivo(caminho_entrada, caminho_saida, k_max):
 
                 #o gatilho do Reset
                 simbolos_processados += 1
-                if simbolos_processados % TAMANHO_JANELA == 0:
+
+                # --- GATILHO DA PODA ---
+                # A cada X símbolos processados, chamamos a rotina de limpeza do modelo
+                if (opcao == 3) and (simbolos_processados % INTERVALO_PODA == 0):
+                    # print(f"  [~] Realizando poda de contextos no byte {simbolos_processados}...")
+                    modelo.podar_tabelas()
+
+                if (opcao == 2) and (simbolos_processados % TAMANHO_JANELA == 0):
                     bits_agora = obter_bits_escritos_ate_agora()
                     bits_nesta_janela = bits_agora - bits_marco_anterior
                     taxa_atual = bits_nesta_janela / TAMANHO_JANELA

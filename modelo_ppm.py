@@ -109,3 +109,38 @@ class ModeloPPMC:
             return (low, high, total)
             
         return None
+    
+    def podar_tabelas(self):
+        """
+        Reduz pela metade a frequência de todos os símbolos.
+        Se a frequência chegar a zero, o símbolo é eliminado.
+        Se um contexto ficar vazio após a eliminação, ele também é removido.
+        """
+        contextos_para_remover = []
+
+        for contexto, frequencias in self.tabelas.items():
+            # O contexto -1 (alfabeto base) geralmente nunca é podado para garantir o fallback
+            if contexto == (-1,):
+                continue
+                
+            simbolos_para_remover = []
+            
+            for simbolo in frequencias:
+                # Divide a frequência pela metade (inteira)
+                frequencias[simbolo] //= 2
+                
+                # Se zerou, marcamos para eliminação
+                if frequencias[simbolo] == 0:
+                    simbolos_para_remover.append(simbolo)
+            
+            # Remove os símbolos zerados do dicionário
+            for simbolo in simbolos_para_remover:
+                del frequencias[simbolo]
+                
+            # Se o contexto ficou sem nenhum símbolo, marcamos para remover o contexto inteiro
+            if len(frequencias) == 0:
+                contextos_para_remover.append(contexto)
+                
+        # Remove os contextos que ficaram vazios
+        for contexto in contextos_para_remover:
+            del self.tabelas[contexto]
