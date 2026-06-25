@@ -3,6 +3,7 @@ import time
 import os
 from compressor import comprimir_arquivo
 from descompressor import descomprimir_arquivo
+import filecmp
 
 
 def main():
@@ -16,6 +17,7 @@ def main():
         print("\nEscolha a ação desejada:")
         print("1 - Comprimir")
         print("2 - Descomprimir")
+        print("4 - Comparar Arquivos")
         print("0 - Sair")
         
         opcao = input("Digite o número da opção: ").strip()
@@ -23,10 +25,28 @@ def main():
         if opcao == '0':
             print("\nEncerrando o programa...")
             break
-        elif opcao not in ['1', '2']:
+        elif opcao not in ['1', '2', '4']:
             print("\nErro: Opção inválida! Tente novamente.")
             continue
-            
+
+        # Comparação binária entre os arquivos    
+        if opcao == '4':
+            # Leitura e validação da entrada
+            arquivo1 = input("\nCaminho do primeiro arquivo a ser comparado (ex: dados/arquivo.txt): ").strip()
+            if not os.path.exists(arquivo1):
+                print(f"Erro: O arquivo de entrada '{arquivo1}' não foi encontrado!")
+                continue
+            arquivo2 = input("Caminho do segundo arquivo (ex: dados/arquivo.txt): ").strip()
+            if not os.path.exists(arquivo2):
+                print(f"Erro: O arquivo de entrada '{arquivo2}' não foi encontrado!")
+                continue
+            if(filecmp.cmp(arquivo1, arquivo2, False)):
+                print("Todos os bits dos arquivos são iguais.")
+                continue
+            else:
+                print("Há alguma diferença entre os arquivos!")
+                continue
+
         acao = "comprimir" if opcao == '1' else "descomprimir"
 
         # Menu de opções
@@ -39,9 +59,9 @@ def main():
         if opcao == 1:
             modo = 1
         elif opcao == 2:
-            modo == 2
+            modo = 2
         else:
-            modo == 3
+            modo = 3
         
         # Leitura e validação da entrada
         entrada = input("\nCaminho do arquivo de entrada (ex: dados/arquivo.txt): ").strip()
