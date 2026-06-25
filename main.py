@@ -17,7 +17,7 @@ def main():
         print("\nEscolha a ação desejada:")
         print("1 - Comprimir")
         print("2 - Descomprimir")
-        print("4 - Comparar Arquivos")
+        print("3 - Comparar Arquivos")
         print("0 - Sair")
         
         opcao = input("Digite o número da opção: ").strip()
@@ -25,12 +25,12 @@ def main():
         if opcao == '0':
             print("\nEncerrando o programa...")
             break
-        elif opcao not in ['1', '2', '4']:
+        elif opcao not in ['1', '2', '3']:
             print("\nErro: Opção inválida! Tente novamente.")
             continue
 
         # Comparação binária entre os arquivos    
-        if opcao == '4':
+        if opcao == '3':
             # Leitura e validação da entrada
             arquivo1 = input("\nCaminho do primeiro arquivo a ser comparado (ex: dados/arquivo.txt): ").strip()
             if not os.path.exists(arquivo1):
